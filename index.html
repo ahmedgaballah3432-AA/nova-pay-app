@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Pay</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#172033;
+  min-height:100vh;
+}
+
+.app{
+  max-width:480px;
+  margin:auto;
+  min-height:100vh;
+  background:#fff;
+}
+
+.header{
+  background:#111827;
+  color:white;
+  padding:25px 20px 30px;
+  border-radius:0 0 28px 28px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:bold;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#20c997;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.balance-title{
+  opacity:.75;
+  font-size:14px;
+}
+
+.balance{
+  font-size:36px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.card{
+  margin:20px;
+  padding:20px;
+  border-radius:22px;
+  background:white;
+  box-shadow:0 8px 30px rgba(0,0,0,.08);
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.action{
+  border:0;
+  background:#f1f5f9;
+  padding:16px 5px;
+  border-radius:16px;
+  font-size:14px;
+  color:#172033;
+  cursor:pointer;
+}
+
+.icon{
+  display:block;
+  font-size:25px;
+  margin-bottom:7px;
+}
+
+.section-title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.transaction{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.transaction:last-child{
+  border-bottom:0;
+}
+
+.tx-name{
+  font-weight:bold;
+}
+
+.tx-date{
+  color:#8b95a7;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.plus{
+  color:#10a765;
+  font-weight:bold;
+}
+
+.minus{
+  color:#e63946;
+  font-weight:bold;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.modal-box{
+  width:100%;
+  max-width:480px;
+  background:white;
+  padding:25px;
+  border-radius:28px 28px 0 0;
+}
+
+.modal-box h2{
+  margin-bottom:20px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:1px solid #ddd;
+  border-radius:14px;
+  margin-bottom:12px;
+  font-size:16px;
+}
+
+.btn{
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:14px;
+  background:#111827;
+  color:white;
+  font-size:17px;
+  cursor:pointer;
+}
+
+.close{
+  background:#eee;
+  color:#222;
+  margin-top:10px;
+}
+
+.bottom{
+  padding:15px 20px 25px;
+  text-align:center;
+  color:#8992a3;
+  font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="top">
+      <div class="logo">NOVA Pay</div>
+      <div class="avatar">N</div>
+    </div>
+
+    <div class="balance-title">الرصيد المتاح</div>
+    <div class="balance" id="balance">5,000.00 ج.م</div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">الخدمات</div>
+
+    <div class="actions">
+
+      <button class="action" onclick="openModal('تحويل أموال')">
+        <span class="icon">💸</span>
+        تحويل
+      </button>
+
+      <button class="action" onclick="openModal('شحن رصيد')">
+        <span class="icon">📱</span>
+        شحن
+      </button>
+
+      <button class="action" onclick="showMessage()">
+        <span class="icon">📊</span>
+        كشف حساب
+      </button>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">آخر المعاملات</div>
+
+    <div id="transactions">
+
+      <div class="transaction">
+        <div>
+          <div class="tx-name">إيداع تجريبي</div>
+          <div class="tx-date">اليوم</div>
+        </div>
+        <div class="plus">+ 1,000 ج.م</div>
+      </div>
+
+      <div class="transaction">
+        <div>
+          <div class="tx-name">دفع فاتورة</div>
+          <div class="tx-date">أمس</div>
+        </div>
+        <div class="minus">- 250 ج.م</div>
+      </div>
+
+      <div class="transaction">
+        <div>
+          <div class="tx-name">تحويل وارد</div>
+          <div class="tx-date">أمس</div>
+        </div>
+        <div class="plus">+ 500 ج.م</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bottom">
+    NOVA Pay © 2026 — نسخة تجريبية
+  </div>
+
+</div>
+
+<div class="modal" id="modal">
+
+  <div class="modal-box">
+
+    <h2 id="modalTitle">تحويل أموال</h2>
+
+    <input id="phone" type="text" placeholder="رقم الهاتف">
+
+    <input id="amount" type="number" placeholder="المبلغ بالجنيه">
+
+    <button class="btn" onclick="submitAction()">
+      تأكيد العملية
+    </button>
+
+    <button class="btn close" onclick="closeModal()">
+      إلغاء
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+let balance = 5000;
+let currentAction = "";
+
+function openModal(action){
+
+  currentAction = action;
+
+  document.getElementById("modalTitle").innerText = action;
+
+  document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal(){
+
+  document.getElementById("modal").style.display = "none";
+
+  document.getElementById("phone").value = "";
+  document.getElementById("amount").value = "";
+}
+
+function submitAction(){
+
+  let phone = document.getElementById("phone").value;
+  let amount = Number(document.getElementById("amount").value);
+
+  if(!phone || !amount || amount <= 0){
+    alert("من فضلك أدخل رقم الهاتف والمبلغ");
+    return;
+  }
+
+  if(currentAction === "تحويل أموال" && amount > balance){
+    alert("الرصيد غير كافٍ");
+    return;
+  }
+
+  if(currentAction === "تحويل أموال"){
+    balance -= amount;
+
+    addTransaction(
+      "تحويل إلى " + phone,
+      "- " + amount.toLocaleString() + " ج.م",
+      "minus"
+    );
+  }
+
+  if(currentAction === "شحن رصيد"){
+    balance -= amount;
+
+    addTransaction(
+      "شحن رصيد " + phone,
+      "- " + amount.toLocaleString() + " ج.م",
+      "minus"
+    );
+  }
+
+  updateBalance();
+  closeModal();
+
+  alert("تم تنفيذ العملية تجريبيًا بنجاح ✅");
+}
+
+function updateBalance(){
+
+  document.getElementById("balance").innerText =
+    balance.toLocaleString("en-US",{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }) + " ج.م";
+}
+
+function addTransaction(name, amount, type){
+
+  let container = document.getElementById("transactions");
+
+  let div = document.createElement("div");
+
+  div.className = "transaction";
+
+  div.innerHTML = `
+    <div>
+      <div class="tx-name">${name}</div>
+      <div class="tx-date">الآن</div>
+    </div>
+    <div class="${type}">${amount}</div>
+  `;
+
+  container.prepend(div);
+}
+
+function showMessage(){
+
+  alert("كشف الحساب الكامل سيتم إضافته في الإصدار القادم 🚀");
+
+}
+
+</script>
+
+</body>
+  </html>
